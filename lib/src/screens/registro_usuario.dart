@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mercado_libre/src/controllers/users.dart';
 
 class FormularioRegistro extends StatefulWidget {
   const FormularioRegistro({super.key});
@@ -14,7 +15,7 @@ class _FormularioRegistroState extends State<FormularioRegistro> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  // Future<Users>? _futureUsers;
+  Future<Users>? _futureUsers;
 
   void _clearControllers() {
     _nameController.clear();
@@ -70,6 +71,12 @@ class _FormularioRegistroState extends State<FormularioRegistro> {
                     prefixIcon: const Icon(Icons.email_outlined),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8))),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Ingrese el corro';
+                  }
+                  return null;
+                },
               ),
               const SizedBox(height: 10),
               TextFormField(
@@ -78,6 +85,12 @@ class _FormularioRegistroState extends State<FormularioRegistro> {
                     prefixIcon: const Icon(Icons.lock),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8))),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Ingrese la contraseña';
+                  }
+                  return null;
+                },
               ),
               const SizedBox(height: 10),
               TextFormField(
@@ -86,6 +99,12 @@ class _FormularioRegistroState extends State<FormularioRegistro> {
                     prefixIcon: const Icon(Icons.lock),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8))),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Confirme la contraseña';
+                  }
+                  return null;
+                },
               ),
               const SizedBox(height: 24),
               SizedBox(
@@ -94,13 +113,19 @@ class _FormularioRegistroState extends State<FormularioRegistro> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        _formKey.currentState!
-                            .save(); // Guardar el formulario si es válido
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text('Registro exitoso'),
-                        ));
-                        Navigator.pushNamed(context, '/perfil');
+                        // _formKey.currentState!
+                        //     .save(); // Guardar el formulario si es válido
+                        // ScaffoldMessenger.of(context)
+                        //     .showSnackBar(const SnackBar(
+                        //   content: Text('Registro exitoso'),
+                        // ));
+                        // Navigator.pushNamed(context, '/perfil');
+                        setState(() {
+                          _futureUsers = createUsers(_nameController.text,
+                              _emailController.text, _passwordController.text);
+                        });
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Registro exitoso')));
                       }
                     },
                     style: ElevatedButton.styleFrom(
